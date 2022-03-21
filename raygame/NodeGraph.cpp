@@ -55,7 +55,7 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 
 	while (openSet.getLength() > 0)
 	{
-		sortGScore(openSet);
+		sortFScore(openSet);
 		currentNode = openSet[0];
 		openSet.remove(currentNode);
 
@@ -63,11 +63,17 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 		{
 			for (int i = 0; i < currentNode->edges.getLength(); i++)
 			{
+				if (!currentNode->edges[i].target->walkable)
+					continue;
+
 				NodeGraph::Node* targetNode = currentNode->edges[i].target;
 				targetNode->color = 0xFF0000FF;
+
 				if (targetNode->gScore == 0 || targetNode->gScore > currentNode->gScore + currentNode->edges[i].cost)
 				{
 					targetNode->gScore = currentNode->gScore + currentNode->edges[i].cost;
+					targetNode->hScore = getManhattanDistance(targetNode, goal);
+					targetNode->fScore = targetNode->gScore + targetNode->hScore;
 					targetNode->previous = currentNode;
 				}
 				if (!openSet.contains(targetNode))
@@ -82,6 +88,13 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 
 	return reconstructPath(start, goal);
 }
+
+float NodeGraph::getManhattanDistance(Node* start, Node* end) 
+{
+	return abs(start->position.x - end->position.x)
+		+ abs(start->position.y - end->position.y);
+}
+
 
 void NodeGraph::sortGScore(DynamicArray<NodeGraph::Node*>& nodes)
 {
