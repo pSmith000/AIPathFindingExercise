@@ -61,7 +61,6 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 
 		if (!closedSet.contains(currentNode))
 		{
-			// For each of the nodes next to the current node set the g scores of each and set
 			for (int i = 0; i < currentNode->edges.getLength(); i++)
 			{
 				NodeGraph::Node* targetNode = currentNode->edges[i].target;
