@@ -29,6 +29,8 @@ namespace NodeGraph
 
 	DynamicArray<Node*> findPath(Node* start, Node* end);
 
+	void sortGScore(DynamicArray<NodeGraph::Node*>& nodes);
+
 	void drawGraph(Node* start);
 
 	void drawNode(Node* node, float size = 14);
